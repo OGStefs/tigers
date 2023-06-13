@@ -1,26 +1,26 @@
-// const apesClaimContract = ""; // MAIN NET
-const apesClaimContract = "0xf8aC099eE981DD077a54761aE6e69C75BC618412"; // TEST NET GOERLI
-//   const contractAddress = "0x61028F622CB6618cAC3DeB9ef0f0D5B9c6369C72"; // MAIN NET
-const contractAddress = "0xa2ec462e0Fa83b5A33e48399E0788c2640edf0cD"; // TEST NET GOERLI
+// const tigersClaimAddress = ""; // MAIN NET
+const tigersClaimAddress = "0xf8aC099eE981DD077a54761aE6e69C75BC618412"; // TEST NET GOERLI
+//   const tigerAddress = "0x61028F622CB6618cAC3DeB9ef0f0D5B9c6369C72"; // MAIN NET
+const tigerAddress = "0xa2ec462e0Fa83b5A33e48399E0788c2640edf0cD"; // TEST NET GOERLI
+
+// const cubsClaimContract = ""; // MAIN NET
+const cubsClaimContract = "0xf8aC099eE981DD077a54761aE6e69C75BC618412"; // TEST NET GOERLI
+//   const cubsAddress = "0x61028F622CB6618cAC3DeB9ef0f0D5B9c6369C72"; // MAIN NET
+const cubsAddress = "0xa2ec462e0Fa83b5A33e48399E0788c2640edf0cD"; // TEST NET GOERLI
 
 // get buttons
-const btn = document.getElementById("connect-button");
-btn?.addEventListener("click", (e) => {
-  connect(e);
-});
+const connectButton = document.getElementById("connect-button");
 const claimWalletBtn = document.getElementById("claim-wallet");
 const claimForgedBtn = document.getElementById("claim-forge");
 const claimCheckBtn = document.getElementById("check-claimed");
 
-let vpassContract;
-let forgeContract;
+let newTigerContract;
+let tigerContract;
+let newCubsContract;
+let cubsContract;
 let account;
 
-/* To connect using MetaMask */
-async function connect(e) {
-  const button = e.target;
-  btn.classList.add("button--loading");
-  button.textContent = "loading...";
+window.addEventListener("load", (event) => {
   if (window.ethereum) {
     // activate claim check button
     claimCheckBtn.classList.remove("empty");
@@ -29,24 +29,41 @@ async function connect(e) {
       claimCheck(e);
     });
 
+    window.web3 = new Web3(window.ethereum);
+    forgeContract = new window.web3.eth.Contract(tigerAbi, tigerAddress);
+    newTigerContract = new web3.eth.Contract(newTigerAbi, tigersClaimAddress);
+
+    connectButton?.addEventListener("click", (e) => {
+      connect(e);
+    });
+  } else {
+    connectButton.textContent = "web3 not supported";
+  }
+});
+
+/* To connect using MetaMask */
+async function connect(e) {
+  const button = e.target;
+  connectButton.classList.add("button--loading");
+  button.textContent = "loading...";
+  if (window.ethereum) {
     try {
-      const accounts = await ethereum.request({
-        method: "eth_requestAccounts",
-      });
+      const accounts = await ethereum
+        .request({
+          method: "eth_requestAccounts",
+        })
+        .catch((err) => {
+          console.log(err.message);
+          connectButton.classList.remove("button--loading");
+          connectButton.textContent = "connect wallet";
+        });
       if (accounts?.length > 0) {
         account = accounts[0];
-        btn.removeEventListener("click", (e) => connect(e));
-
-        window.web3 = new Web3(window.ethereum);
-        forgeContract = new window.web3.eth.Contract(
-          membershipAbi,
-          contractAddress
-        );
-        vpassContract = new web3.eth.Contract(apesAbi, apesClaimContract);
+        connectButton.removeEventListener("click", (e) => connect(e));
 
         await getOwned(account);
         await getForged(account);
-        btn.classList.remove("button--loading");
+        connectButton.classList.remove("button--loading");
         button.textContent = account.slice(0, 5) + "..." + account.slice(-4);
         window.location = "#venture";
       }
@@ -78,7 +95,7 @@ async function getOwned(walletAddress) {
           .call()
           .catch((err) => console.log(err.message));
         // check if tokens are claimed already:
-        const isClaimed = await vpassContract.methods
+        const isClaimed = await newTigerContract.methods
           .apeClaimed(id)
           .call()
           .catch((err) => console.log(err.message));
@@ -148,7 +165,7 @@ async function getForged(walletAddress) {
   let a = web3.utils.toChecksumAddress(walletAddress);
   if (x) allforged = x[a]?.forged;
   for (let i = 0; i < allforged?.length; i++) {
-    const isClaimed = await vpassContract.methods
+    const isClaimed = await newTigerContract.methods
       .apeClaimed(allforged[i])
       .call()
       .catch((err) => console.log(err.message));
@@ -222,12 +239,12 @@ async function vpassMint(itemsToMint, claimingForged) {
 async function claimApes(itemsToMint, areForged) {
   try {
     if (areForged) {
-      await vpassContract.methods
+      await newTigerContract.methods
         .claimForgedApes(itemsToMint)
         .send({ from: account });
       await getForged(account);
     } else {
-      await vpassContract.methods
+      await newTigerContract.methods
         .claimApes(itemsToMint)
         .send({ from: account });
       await getOwned(account);
@@ -266,8 +283,9 @@ async function claimApes(itemsToMint, areForged) {
 const claimCheck = async (e) => {
   e.preventDefault();
   const membership = document.getElementById("membership")?.value;
+  if (!membership) return;
   try {
-    const isClaimed = await vpassContract.methods
+    const isClaimed = await newTigerContract.methods
       .apeClaimed(parseInt(membership))
       .call()
       .catch((err) => console.log(err.message));

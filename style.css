@@ -240,11 +240,11 @@ img {
   z-index: -1;
 }
 
-#services .service-bottom .icon {
+/* #services .service-bottom .icon {
   height: 50px;
   width: 50px;
   margin-bottom: 20px;
-}
+} */
 
 #services .service-item h2 {
   font-style: 2rem;
@@ -295,7 +295,7 @@ img {
   color: rgba(200, 200, 200, 0.8);
 }
 
-#services #claim-form {
+#services .claim-form {
   font-size: 1.4rem;
   line-height: 2.5rem;
   font-weight: 300;
@@ -308,7 +308,7 @@ img {
   color: white;
 }
 
-#services #claim-form input {
+#services .claim-form input {
   font-size: 2rem;
 }
 

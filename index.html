@@ -33,7 +33,7 @@
     <section id="services">
       <div class="services container">
         <div class="service-top">
-          <h1 id="venture" class="section-title">
+          <h1 id="claim" class="section-title">
             <span>TIGER</span> AND <span>CUB</span> MIGRATION
           </h1>
           <p>Migration of Tigers and Cubs to their new homes (contracts)</p>
@@ -66,11 +66,40 @@
           </div>
 
           <div class="service-item">
+            <h2>Claim Owned Cubs</h2>
+            <p id="wallet-text-underline-cubs">.</p>
+            <p id="wallet-text-cubs">.</p>
+            <button id="claim-wallet-cubs" class="cta empty">
+              not connected
+            </button>
+          </div>
+
+          <div class="service-item">
+            <h2>Claim Forged Cubs</h2>
+            <p id="forge-text-underline-cubs">.</p>
+            <p id="forge-text-cubs">.</p>
+            <button id="claim-forge-cubs" class="cta empty">
+              not connected
+            </button>
+          </div>
+
+          <div class="service-item">
             <h2>Check Tiger</h2>
-            <form id="claim-form">
+            <form class="claim-form">
               <label for="membership">Tiger:</label>
               <input type="number" id="membership" name="membership" />
               <button id="check-claimed" class="cta empty">
+                not connected
+              </button>
+            </form>
+          </div>
+
+          <div class="service-item">
+            <h2>Check Cub</h2>
+            <form class="claim-form">
+              <label for="membership">Tiger:</label>
+              <input type="number" id="membership" name="membership" />
+              <button id="check-claimed-cub" class="cta empty">
                 not connected
               </button>
             </form>
@@ -104,8 +133,8 @@
     <!-- End of Footer -->
   </body>
 
-  <script type="text/javascript" src="./resources/memberabi.js"></script>
-  <script type="text/javascript" src="./resources/vpassabi.js"></script>
-  <script type="text/javascript" src="./resources/web3.js"></script>
+  <script type="text/javascript" src="./resources/tigerAbi.js"></script>
+  <script type="text/javascript" src="./resources/newTigerAbi.js"></script>
+  <script type="text/javascript" src="./resources/tigers.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.7.4-rc.1/web3.min.js"></script>
 </html>

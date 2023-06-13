@@ -1,4 +1,4 @@
-const apesAbi = [
+const newTigerAbi = [
   { inputs: [], stateMutability: "nonpayable", type: "constructor" },
   { inputs: [], name: "ApprovalCallerNotOwnerNorApproved", type: "error" },
   { inputs: [], name: "ApprovalQueryForNonexistentToken", type: "error" },
