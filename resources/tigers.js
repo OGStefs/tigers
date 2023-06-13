@@ -274,11 +274,12 @@ async function claimApes(itemsToMint, areForged) {
 
 const claimCheck = async (e) => {
   e.preventDefault();
-  const membership = document.getElementById("membership")?.value;
-  if (!membership) return;
+  const tigerInput = document.getElementById("claimedTiger");
+  const claimedTiger = tigerInput?.value;
+  if (!claimedTiger) return;
   try {
     const isClaimed = await newTigerContract.methods
-      .apeClaimed(parseInt(membership))
+      .apeClaimed(parseInt(claimedTiger))
       .call()
       .catch((err) => console.log(err.message));
 
@@ -289,7 +290,7 @@ const claimCheck = async (e) => {
       title: "Check Check",
       html:
         "<h2>Tiger " +
-        membership +
+        claimedTiger +
         "</h2>" +
         "<h1>Has</h1>" +
         "<h5>" +
@@ -303,4 +304,5 @@ const claimCheck = async (e) => {
   } catch (error) {
     console.log(error.message);
   }
+  tigerInput.value = "";
 };
