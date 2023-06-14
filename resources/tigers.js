@@ -1,7 +1,7 @@
 // const tigersClaimAddress = ""; // MAIN NET
-const tigersClaimAddress = "0xf8aC099eE981DD077a54761aE6e69C75BC618412"; // TEST NET GOERLI
+const tigersClaimAddress = "0xb3E7d5CB87C2f44bac2C20bE616Fe0D27448bD10"; // TEST NET GOERLI
 //   const tigerAddress = "0x61028F622CB6618cAC3DeB9ef0f0D5B9c6369C72"; // MAIN NET
-const tigerAddress = "0xa2ec462e0Fa83b5A33e48399E0788c2640edf0cD"; // TEST NET GOERLI
+const tigerAddress = "0x8580156166e7ae7c4a050821a8F2a03bcf9d2Ee9"; // TEST NET GOERLI
 
 // get buttons
 const connectButton = document.getElementById("connect-button");
