@@ -1,5 +1,5 @@
 // const tigersClaimAddress = ""; // MAIN NET
-const tigersClaimAddress = "0xb3E7d5CB87C2f44bac2C20bE616Fe0D27448bD10"; // TEST NET GOERLI
+const tigersClaimAddress = "0x0f1d3f03ACBdeff91695d33C9B59A6F6122fDc6e"; // TEST NET GOERLI
 //   const tigerAddress = "0x61028F622CB6618cAC3DeB9ef0f0D5B9c6369C72"; // MAIN NET
 const tigerAddress = "0x8580156166e7ae7c4a050821a8F2a03bcf9d2Ee9"; // TEST NET GOERLI
 
@@ -23,22 +23,19 @@ window.addEventListener("load", (event) => {
     });
 
     window.web3 = new Web3(window.ethereum);
-    forgeContract = new window.web3.eth.Contract(tigerAbi, tigerAddress);
+    tigerContract = new window.web3.eth.Contract(tigerAbi, tigerAddress);
     newTigerContract = new web3.eth.Contract(newTigerAbi, tigersClaimAddress);
 
-    connectButton?.addEventListener("click", (e) => {
-      connect(e);
-    });
+    connectButton?.addEventListener("click", connect(e));
   } else {
     connectButton.textContent = "web3 not supported";
   }
 });
 
 /* To connect using MetaMask */
-async function connect(e) {
-  const button = e.target;
+async function connect() {
   connectButton.classList.add("button--loading");
-  button.textContent = "loading...";
+  connectButton.textContent = "loading...";
   if (window.ethereum) {
     try {
       const accounts = await ethereum
@@ -52,12 +49,11 @@ async function connect(e) {
         });
       if (accounts?.length > 0) {
         account = accounts[0];
-        connectButton.removeEventListener("click", (e) => connect(e));
-
         await getOwned(account);
         await getForged(account);
         connectButton.classList.remove("button--loading");
-        button.textContent = account.slice(0, 5) + "..." + account.slice(-4);
+        connectButton.textContent =
+          account.slice(0, 5) + "..." + account.slice(-4);
         window.location = "#claim";
       }
     } catch (error) {
@@ -77,23 +73,23 @@ async function getOwned(walletAddress) {
 
   try {
     // get tigers
-    const bal = await forgeContract.methods
+    const bal = await tigerContract.methods
       .balanceOf(walletAddress)
       .call()
       .catch();
     if (bal > 0) {
       for (let i = 0; i < bal; i++) {
-        const id = await forgeContract.methods
+        const id = await tigerContract.methods
           .tokenOfOwnerByIndex(walletAddress, i)
           .call()
           .catch((err) => console.log(err.message));
         // check if tokens are claimed already:
         const isClaimed = await newTigerContract.methods
-          .apeClaimed(id)
+          .isClaimed(id)
           .call()
           .catch((err) => console.log(err.message));
         // console.log(isClaimed);
-        if (isClaimed === "0") {
+        if (!isClaimed) {
           token_ids_lst.push(+Number(id));
         } else {
           claimedTokens.push(+Number(id));
@@ -103,7 +99,7 @@ async function getOwned(walletAddress) {
       if (token_ids_lst?.length > 0) {
         claimWalletBtn.textContent = "CLAIM";
         claimWalletBtn.classList.remove("empty");
-        claimWalletBtn.addEventListener("click", (e) =>
+        claimWalletBtn.addEventListener("click", () =>
           vpassMint(
             token_ids_lst.sort((a, b) => a - b),
             false
@@ -119,7 +115,7 @@ async function getOwned(walletAddress) {
     }
     console.log("Owned: " + String(token_ids_lst));
   } catch (error) {
-    console.log("error: " + error);
+    console.log("error: " + error.message);
   }
 
   document.getElementById("wallet-text-underline").textContent =
@@ -159,11 +155,11 @@ async function getForged(walletAddress) {
   if (x) allforged = x[a]?.forged;
   for (let i = 0; i < allforged?.length; i++) {
     const isClaimed = await newTigerContract.methods
-      .apeClaimed(allforged[i])
+      .isClaimed(allforged[i])
       .call()
       .catch((err) => console.log(err.message));
     // console.log(allforged[i], isClaimed);
-    if (isClaimed === "0") {
+    if (!isClaimed) {
       claimable.push(allforged[i]);
     } else {
       claimedTokens.push(allforged[i]);
@@ -174,7 +170,7 @@ async function getForged(walletAddress) {
   if (claimable?.length > 0) {
     claimForgedBtn.textContent = "CLAIM";
     claimForgedBtn.classList.remove("empty");
-    claimForgedBtn.addEventListener("click", (e) =>
+    claimForgedBtn.addEventListener("click", () =>
       vpassMint(
         claimable.sort((a, b) => a - b),
         true
@@ -182,6 +178,7 @@ async function getForged(walletAddress) {
     );
   } else {
     claimForgedBtn.textContent = "nothing to claim";
+    claimForgedBtn.classList.add("empty");
   }
 
   document.getElementById("forge-text-underline").textContent =
@@ -203,7 +200,7 @@ async function vpassMint(itemsToMint, claimingForged) {
     claimWalletBtn.classList.add("button--loading");
   }
 
-  var r = await Swal.fire({
+  let r = await Swal.fire({
     title: "<h1>Tigers Owned</h1>",
     html:
       "<h2>You are minting " +
@@ -235,17 +232,17 @@ async function claimApes(itemsToMint, areForged) {
   try {
     if (areForged) {
       await newTigerContract.methods
-        .claimForgedApes(itemsToMint)
+        .claimForgedTigers(itemsToMint)
         .send({ from: account });
       await getForged(account);
     } else {
       await newTigerContract.methods
-        .claimApes(itemsToMint)
+        .claimTigers(itemsToMint)
         .send({ from: account });
       await getOwned(account);
     }
   } catch (error) {
-    console.log("Error:", error);
+    console.log("Error:", error.message);
     claimForgedBtn.classList.remove("button--loading");
     claimWalletBtn.classList.remove("button--loading");
     await Swal.fire({
@@ -267,7 +264,7 @@ async function claimApes(itemsToMint, areForged) {
     title: "Tigers Claimed",
     html: "<h2>You have claimed " + String(itemsToMint.length) + " Tigers</h2>",
     icon: "info",
-    confirmButtonText: "<h4>The Adventure Begins!</h4>",
+    confirmButtonText: "<h4>Roar!</h4>",
     showDenyButton: false,
   });
 }
@@ -276,15 +273,18 @@ const claimCheck = async (e) => {
   e.preventDefault();
   const tigerInput = document.getElementById("claimedTiger");
   const claimedTiger = tigerInput?.value;
+
   if (!claimedTiger) return;
+
   try {
     const isClaimed = await newTigerContract.methods
-      .apeClaimed(parseInt(claimedTiger))
+      .isClaimed(parseInt(claimedTiger))
       .call()
       .catch((err) => console.log(err.message));
 
     console.log(isClaimed);
-    const claimed = isClaimed === "0" ? "<h5>not</h5>" : "<h6>already</h6>";
+
+    const claimed = !isClaimed ? "<h5>not</h5>" : "<h6>already</h6>";
 
     await Swal.fire({
       title: "Check Check",

@@ -1,6 +1,11 @@
 const newTigerAbi = [
   { inputs: [], stateMutability: "nonpayable", type: "constructor" },
   {
+    inputs: [{ internalType: "address", name: "operator", type: "address" }],
+    name: "OperatorNotAllowed",
+    type: "error",
+  },
+  {
     anonymous: false,
     inputs: [
       {
@@ -89,14 +94,27 @@ const newTigerAbi = [
   },
   {
     inputs: [],
-    name: "ApeContract",
+    name: "OPERATOR_FILTER_REGISTRY",
+    outputs: [
+      {
+        internalType: "contract IOperatorFilterRegistry",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "TigerContract",
     outputs: [{ internalType: "address", name: "", type: "address" }],
     stateMutability: "view",
     type: "function",
   },
   {
     inputs: [],
-    name: "ApeForge",
+    name: "TigerForge",
     outputs: [{ internalType: "address", name: "", type: "address" }],
     stateMutability: "view",
     type: "function",
@@ -105,13 +123,6 @@ const newTigerAbi = [
     inputs: [],
     name: "_baseTokenURI",
     outputs: [{ internalType: "string", name: "", type: "string" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    name: "apeClaimed",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
     stateMutability: "view",
     type: "function",
   },
@@ -150,16 +161,7 @@ const newTigerAbi = [
     inputs: [
       { internalType: "uint256[]", name: "theTokenIDs", type: "uint256[]" },
     ],
-    name: "claimApes",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      { internalType: "uint256[]", name: "theTokenIDs", type: "uint256[]" },
-    ],
-    name: "claimForgedApes",
+    name: "claimForgedTigers",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -169,6 +171,15 @@ const newTigerAbi = [
     name: "claimIsActive",
     outputs: [{ internalType: "bool", name: "", type: "bool" }],
     stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "uint256[]", name: "theTokenIDs", type: "uint256[]" },
+    ],
+    name: "claimTigers",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
   {
@@ -191,7 +202,7 @@ const newTigerAbi = [
   {
     inputs: [{ internalType: "uint256", name: "tokenId", type: "uint256" }],
     name: "isClaimed",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    outputs: [{ internalType: "bool", name: "", type: "bool" }],
     stateMutability: "view",
     type: "function",
   },
@@ -203,26 +214,9 @@ const newTigerAbi = [
     type: "function",
   },
   {
-    inputs: [
-      { internalType: "address", name: "to", type: "address" },
-      { internalType: "uint256", name: "theToken", type: "uint256" },
-    ],
-    name: "mint",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
     inputs: [],
     name: "name",
     outputs: [{ internalType: "string", name: "", type: "string" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "operatorFilteringEnabled",
-    outputs: [{ internalType: "bool", name: "", type: "bool" }],
     stateMutability: "view",
     type: "function",
   },
@@ -234,17 +228,18 @@ const newTigerAbi = [
     type: "function",
   },
   {
-    inputs: [
-      { internalType: "uint256[]", name: "tokenIds", type: "uint256[]" },
-    ],
-    name: "ownerBurner",
+    inputs: [],
+    name: "ownerClaim",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
   },
   {
-    inputs: [],
-    name: "ownerClaim",
+    inputs: [
+      { internalType: "address", name: "to", type: "address" },
+      { internalType: "uint256", name: "theToken", type: "uint256" },
+    ],
+    name: "ownerMint",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -304,13 +299,6 @@ const newTigerAbi = [
     type: "function",
   },
   {
-    inputs: [{ internalType: "bool", name: "value", type: "bool" }],
-    name: "setOperatorFilteringEnabled",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
     inputs: [{ internalType: "bytes4", name: "interfaceId", type: "bytes4" }],
     name: "supportsInterface",
     outputs: [{ internalType: "bool", name: "", type: "bool" }],
@@ -326,7 +314,7 @@ const newTigerAbi = [
   },
   {
     inputs: [],
-    name: "toggleSaleStatus",
+    name: "toggleClaimtatus",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
