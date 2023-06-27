@@ -33,7 +33,7 @@ window.addEventListener("load", (event) => {
     claimCheckBtnCubs.classList.remove("empty");
     claimCheckBtnCubs.textContent = "check";
     claimCheckBtnCubs?.addEventListener("click", (e) => {
-      claimCheck(e);
+      claimCheckCubs(e);
     });
 
     window.web3 = new Web3(window.ethereum);
@@ -74,7 +74,7 @@ async function connect() {
         connectButton.classList.remove("button--loading");
         connectButton.textContent =
           account.slice(0, 5) + "..." + account.slice(-4);
-        window.location = "#claim";
+        // window.location = "#claim";
       }
     } catch (error) {
       console.log(error);
@@ -530,4 +530,42 @@ const claimCheck = async (e) => {
     console.log(error.message);
   }
   tigerInput.value = "";
+};
+
+const claimCheckCubs = async (e) => {
+  e.preventDefault();
+  const cubInput = document.getElementById("claimedCub");
+  const claimedTiger = cubInput?.value;
+  console.log(claimedTiger);
+  if (!claimedTiger) return;
+
+  try {
+    const isClaimed = await newCubContract.methods
+      .isClaimed(parseInt(claimedTiger))
+      .call()
+      .catch((err) => console.log(err.message));
+
+    console.log(isClaimed);
+
+    const claimed = !isClaimed ? "<h5>not</h5>" : "<h6>already</h6>";
+
+    await Swal.fire({
+      title: "Check Check",
+      html:
+        "<h2>Cub " +
+        claimedTiger +
+        "</h2>" +
+        "<h1>Has</h1>" +
+        "<h5>" +
+        claimed +
+        "</h5>" +
+        "<h1> been claimed.</h1>",
+      icon: "info",
+      confirmButtonText: "<h4>Thanks!</h4>",
+      showDenyButton: false,
+    });
+  } catch (error) {
+    console.log(error.message);
+  }
+  cubInput.value = "";
 };

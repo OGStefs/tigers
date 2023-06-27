@@ -312,6 +312,15 @@ img {
   font-size: 2rem;
 }
 
+#claimedTiger,
+#claimedCub {
+  background-color: rgb(67, 67, 67);
+  color: white;
+  border-radius: 4px;
+  text-align: center;
+  font-size: larger;
+}
+
 /* End of Service Section */
 
 /* Footer */
