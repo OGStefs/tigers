@@ -5,7 +5,9 @@
   "0xa56918187F3Db7AaB93AEaD56845ad47E61a3005": {
     "forged": [2, 4, 6]
   },
-
+  "0xe9a095F6Af3050B450bF97BF70B8479cA2244343": {
+    "forged": [8, 10, 12, 14]
+  },
   "0xAc492b0FeC41590ecB08B0EDBBEfA3319CFc7e1F": {
     "forged": [12, 13]
   },
