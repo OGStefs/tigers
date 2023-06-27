@@ -1,24 +1,16 @@
-// const tigersClaimAddress = ""; // MAIN NET
-const tigersClaimAddress = "0xf8aC099eE981DD077a54761aE6e69C75BC618412"; // TEST NET GOERLI
-//   const tigerAddress = "0x61028F622CB6618cAC3DeB9ef0f0D5B9c6369C72"; // MAIN NET
-const tigerAddress = "0xa2ec462e0Fa83b5A33e48399E0788c2640edf0cD"; // TEST NET GOERLI
-
-// const cubsClaimContract = ""; // MAIN NET
-const cubsClaimContract = "0xf8aC099eE981DD077a54761aE6e69C75BC618412"; // TEST NET GOERLI
-//   const cubsAddress = "0x61028F622CB6618cAC3DeB9ef0f0D5B9c6369C72"; // MAIN NET
-const cubsAddress = "0xa2ec462e0Fa83b5A33e48399E0788c2640edf0cD"; // TEST NET GOERLI
+// const cubsClaimAddress = ""; // MAIN NET
+const cubsClaimAddress = "0xf8aC099eE981DD077a54761aE6e69C75BC618412"; // TEST NET GOERLI
+//   const cubAddress = "0x61028F622CB6618cAC3DeB9ef0f0D5B9c6369C72"; // MAIN NET
+const cubAddress = "0x891D1e106c2357d0B84726C18411cCf87B5EB98B"; // TEST NET GOERLI
 
 // get buttons
-const connectButton = document.getElementById("connect-button");
-const claimWalletBtn = document.getElementById("claim-wallet");
-const claimForgedBtn = document.getElementById("claim-forge");
-const claimCheckBtn = document.getElementById("check-claimed");
+const claimWalletBtn = document.getElementById("claim-wallet-cubs");
+const claimForgedBtn = document.getElementById("claim-forge-cubs");
+const claimCheckBtn = document.getElementById("check-claimed-cubs");
 
-let newTigerContract;
-let tigerContract;
-let newCubsContract;
-let cubsContract;
-let account;
+let newCubContract;
+let cubContract;
+// let account;
 
 window.addEventListener("load", (event) => {
   if (window.ethereum) {
@@ -29,15 +21,9 @@ window.addEventListener("load", (event) => {
       claimCheck(e);
     });
 
-    window.web3 = new Web3(window.ethereum);
-    forgeContract = new window.web3.eth.Contract(tigerAbi, tigerAddress);
-    newTigerContract = new web3.eth.Contract(newTigerAbi, tigersClaimAddress);
-
-    connectButton?.addEventListener("click", (e) => {
-      connect(e);
-    });
-  } else {
-    connectButton.textContent = "web3 not supported";
+    // window.web3 = new Web3(window.ethereum);
+    cubContract = new window.web3.eth.Contract(cubAbi, cubAddress);
+    newCubContract = new web3.eth.Contract(newCubAbi, cubsClaimAddress);
   }
 });
 
@@ -84,18 +70,18 @@ async function getOwned(walletAddress) {
 
   try {
     // get forged memberships
-    const bal = await forgeContract.methods
+    const bal = await cubContract.methods
       .balanceOf(walletAddress)
       .call()
       .catch();
     if (bal > 0) {
       for (let i = 0; i < bal; i++) {
-        const id = await forgeContract.methods
+        const id = await cubContract.methods
           .tokenOfOwnerByIndex(walletAddress, i)
           .call()
           .catch((err) => console.log(err.message));
         // check if tokens are claimed already:
-        const isClaimed = await newTigerContract.methods
+        const isClaimed = await newCubContract.methods
           .apeClaimed(id)
           .call()
           .catch((err) => console.log(err.message));
@@ -165,7 +151,7 @@ async function getForged(walletAddress) {
   let a = web3.utils.toChecksumAddress(walletAddress);
   if (x) allforged = x[a]?.forged;
   for (let i = 0; i < allforged?.length; i++) {
-    const isClaimed = await newTigerContract.methods
+    const isClaimed = await newCubContract.methods
       .apeClaimed(allforged[i])
       .call()
       .catch((err) => console.log(err.message));
@@ -239,12 +225,12 @@ async function vpassMint(itemsToMint, claimingForged) {
 async function claimApes(itemsToMint, areForged) {
   try {
     if (areForged) {
-      await newTigerContract.methods
+      await newCubContract.methods
         .claimForgedApes(itemsToMint)
         .send({ from: account });
       await getForged(account);
     } else {
-      await newTigerContract.methods
+      await newCubContract.methods
         .claimApes(itemsToMint)
         .send({ from: account });
       await getOwned(account);
@@ -285,7 +271,7 @@ const claimCheck = async (e) => {
   const membership = document.getElementById("membership")?.value;
   if (!membership) return;
   try {
-    const isClaimed = await newTigerContract.methods
+    const isClaimed = await newCubContract.methods
       .apeClaimed(parseInt(membership))
       .call()
       .catch((err) => console.log(err.message));
