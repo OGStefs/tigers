@@ -43,16 +43,27 @@ window.addEventListener("load", (event) => {
     newCubContract = new web3.eth.Contract(newCubsAbi, cubsClaimAddress);
 
     connectButton?.addEventListener("click", connect);
+
     connect();
   } else {
     connectButton.textContent = "web3 not supported";
   }
 });
 
+window.ethereum.on("chainChanged", (chainId) => window.location.reload());
+
 /* To connect using MetaMask */
 async function connect() {
   connectButton.classList.add("button--loading");
   connectButton.textContent = "loading...";
+
+  if (window.ethereum.chainId != "0x5") {
+    // TODO: change this to main net "0x1"
+    connectButton.textContent = "wrong network!";
+    connectButton.classList.remove("button--loading");
+    return;
+  }
+
   if (window.ethereum) {
     try {
       const accounts = await ethereum
