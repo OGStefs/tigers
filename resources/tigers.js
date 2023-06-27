@@ -42,7 +42,8 @@ window.addEventListener("load", (event) => {
     cubContract = new window.web3.eth.Contract(cubsAbi, cubAddress);
     newCubContract = new web3.eth.Contract(newCubsAbi, cubsClaimAddress);
 
-    connectButton?.addEventListener("click", connect());
+    connectButton?.addEventListener("click", connect);
+    connect();
   } else {
     connectButton.textContent = "web3 not supported";
   }
@@ -447,6 +448,8 @@ async function claimApes(itemsToMint, areForged) {
     confirmButtonText: "<h4>Roar!</h4>",
     showDenyButton: false,
   });
+
+  location.reload();
 }
 
 async function claimCubs(itemsToMint, areForged) {
@@ -488,6 +491,7 @@ async function claimCubs(itemsToMint, areForged) {
     confirmButtonText: "<h4>Meow!</h4>",
     showDenyButton: false,
   });
+  location.reload();
 }
 
 const claimCheck = async (e) => {
