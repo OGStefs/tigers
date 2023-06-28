@@ -50,6 +50,12 @@ window.addEventListener("load", (event) => {
   }
 });
 
+function handleAccountsChanged(accounts) {
+  connect();
+}
+
+window.ethereum.on("accountsChanged", (acc) => handleAccountsChanged(acc));
+
 window.ethereum.on("chainChanged", (chainId) => window.location.reload());
 
 /* To connect using MetaMask */
@@ -57,7 +63,7 @@ async function connect() {
   connectButton.classList.add("button--loading");
   connectButton.textContent = "loading...";
 
-  if (window.ethereum.chainId != "0x5") {
+  if (window.ethereum.chainId !== "0x5") {
     // TODO: change this to main net "0x1"
     connectButton.textContent = "wrong network!";
     connectButton.classList.remove("button--loading");
