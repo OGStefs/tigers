@@ -1,6 +1,7 @@
 on:
-  schedule:
-    - cron: "*/5 * * * *"
+  [workflow_dispatch]
+  # schedule:
+  #   - cron: "*/5 * * * *"
 
 jobs:
   example-job:
@@ -12,7 +13,7 @@ jobs:
       - name: ls
         run: ls
       - name: cd up
-        run: ls
+        run: cd ..
       - name: ls again
         run: ls
       # - name: run internal
