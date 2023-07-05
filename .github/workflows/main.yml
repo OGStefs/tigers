@@ -12,4 +12,4 @@ jobs:
       - name: run internal
         run: node ./.github/scripts/scheduler.js
       - name: run script
-        run: node "../../../resources/scheduler.js"
+        run: node "/home/resources/scheduler.js"
