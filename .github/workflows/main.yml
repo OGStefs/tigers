@@ -19,5 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Connect to PostgreSQL
     steps:
+      - name: show pwd
+        run: pwd
       - name: run script
-        run: node "../../resources/scheduler.js"
+        run: node "../../../resources/scheduler.js"
