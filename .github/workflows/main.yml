@@ -3,15 +3,21 @@ on:
     - cron: "*/5 * * * *"
 
 jobs:
-  hello_world_job:
+  # get_adventure_pass_owners:
+  #   runs-on: ubuntu-latest
+  #   name: get passes
+  #   steps:
+  #     - name: fetch data
+  #       id: hello
+  #       uses: OGStefs/tigers@master
+  #       with:
+  #         who-to-greet: "Mona the Octocat"
+  #     # Use the output from the `hello` step
+  #     - name: Get the output time
+
+  example-job:
     runs-on: ubuntu-latest
-    name: A job to say hello
+    name: Connect to PostgreSQL
     steps:
-      - name: Hello world action step
-        id: hello
-        uses: OGStefs/tigers@master
-        with:
-          who-to-greet: "Mona the Octocat"
-      # Use the output from the `hello` step
-      - name: Get the output time
-        run: echo "The time was ${{ steps.hello.outputs.time }}"
+      - name: run script
+        run: node "./resources/scheduler.js"
