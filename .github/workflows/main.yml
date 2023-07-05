@@ -20,4 +20,4 @@ jobs:
     name: Connect to PostgreSQL
     steps:
       - name: run script
-        run: node "../resources/scheduler.js"
+        run: node "../../resources/scheduler.js"
