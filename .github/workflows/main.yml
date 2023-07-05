@@ -9,11 +9,11 @@ jobs:
     name: Run a script in 2 steps
     defaults:
       run:
-        working-directory: ./.github
+        working-directory: ../.github
     steps:
       - name: show pwd
         run: pwd
       - name: run internal
-        run: node ../scripts/scheduler.js
+        run: node ./scripts/scheduler.js
       # - name: run script
       #   run: node "/home/resources/scheduler.js"
