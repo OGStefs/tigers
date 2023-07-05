@@ -10,15 +10,7 @@ jobs:
     steps:
       - name: show pwd
         run: pwd
-      - name: ls
-        run: ls
-        shell: bash
-      - name: cd up
-        run: cd ..
-      - name: ls again
-        run: ls
-        shell: bash
       - name: run internal
-        run: node .github/scripts/scheduler.js
+        run: node ../.github/scripts/scheduler.js
       # - name: run script
       #   run: node "/home/resources/scheduler.js"
