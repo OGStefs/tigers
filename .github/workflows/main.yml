@@ -1,19 +1,38 @@
+# on:
+#   [workflow_dispatch]
+#   # schedule:
+#   #   - cron: "*/5 * * * *"
+
+# jobs:
+#   example-job:
+#     runs-on: ubuntu-latest
+#     name: Run a script in 2 steps
+#     defaults:
+#       run:
+#         working-directory: .github
+#     steps:
+#       - name: show pwd
+#         run: pwd
+#       - name: run internal
+#         run: node ./scripts/scheduler.js
+#       # - name: run script
+#       #   run: node "/home/resources/scheduler.js"
+
 on:
   [workflow_dispatch]
   # schedule:
   #   - cron: "*/5 * * * *"
 
 jobs:
-  example-job:
+  hello_world_job:
     runs-on: ubuntu-latest
-    name: Run a script in 2 steps
-    defaults:
-      run:
-        working-directory: .github
+    name: A job to say hello
     steps:
-      - name: show pwd
-        run: pwd
-      - name: run internal
-        run: node ./scripts/scheduler.js
-      # - name: run script
-      #   run: node "/home/resources/scheduler.js"
+      - name: Hello world action step
+        id: hello
+        uses: OGStefs/tigers@master
+        with:
+          who-to-greet: "Mona the Octocat"
+      # Use the output from the `hello` step
+      - name: Get the output time
+        run: echo "The time was ${{ steps.hello.outputs.time }}"
