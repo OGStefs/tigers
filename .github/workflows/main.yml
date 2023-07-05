@@ -11,6 +11,6 @@ jobs:
       - name: show pwd
         run: pwd
       - name: run internal
-        run: node ./scripts/scheduler.js
+        run: node ../scripts/scheduler.js
       # - name: run script
       #   run: node "/home/resources/scheduler.js"
