@@ -12,7 +12,7 @@ jobs:
       - name: ls
         run: ls
       - name: cd up
-        run: ls
+        run: cd ..
       - name: ls again
         run: ls
       # - name: run internal
