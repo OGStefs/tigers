@@ -14,6 +14,11 @@ jobs:
         uses: OGStefs/tigers@master
       - name: commit file
         run: |
+          git config --global user.email "stefanistweg@gmail.com"
+          git config --global user.name "OGStefs"
           git add .
           git commit -m "Update json"
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
           git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
