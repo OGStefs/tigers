@@ -15,7 +15,7 @@ jobs:
       - name: commit file
         run: |
           pwd
-          cd tigers
+          cd ..
           git config --global user.email "stefanistweg@gmail.com"
           git config --global user.name "OGStefs"
           git add .
