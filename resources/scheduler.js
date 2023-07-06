@@ -1,78 +1,46 @@
-import Web3 from "web3";
-console.log("da shit");
+import axios from "axios";
+import dotenv from "dotenv";
 
-// const blockNumber = await web3.eth.getBlockNumber();
-// console.log(blockNumber);
+dotenv.config();
 
-// import axios from "axios";
-// import { safeToFile } from "./safeToFile.js";
+const wallet = "0xe7D7C015aF94b282859184CABed04fF23a24bB1B";
 
-// const list = {};
-// let page = 0;
-// let works = true;
-// const pageSize = 1;
+const getPasses = async () => {
+  const tokensOwned = [];
+  const options = {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "X-API-Key": process.env.MORALIS,
+    },
+  };
 
-// const collection = "adventure-pass";
+  //   for (let i = 0; i < keys.length; i++) {
+  try {
+    const response = await axios(
+      `https://deep-index.moralis.io/api/v2/${wallet}/nft?chain=eth&format=decimal&token_addresses%5B0%5D=0xd124d5200c95648c9d1eb958a51e610b2a395351&media_items=false`,
+      options
+    ).catch(async (err) => {
+      //   await sendEmail(
+      //     "key moralis error",
+      //     `${err.response.status}, ${err.response.data}`
+      //   );
+      console.error(
+        "error from axios in getKeyOwnersExternal moralis call",
+        err.response.status,
+        err.response.data
+      );
+    });
 
-// const options = {
-//   method: "GET",
-//   headers: {
-//     Accept: "application/json",
-//     "X-API-KEY": "xxx",
-//     "Content-Type": "application/json",
-//   },
-// };
+    console.log(response.data.result.length);
+    response?.data?.result.forEach((token) => {
+      tokensOwned.push(token.token_id);
+    });
 
-// while (works) {
-//   const test = await axios(
-//     `https://api.opensea.io/assets?&collection=${collection}&limit=${pageSize}&offset=${
-//       page * pageSize
-//     }&order_direction=desc`,
-//     //   }`
-//     options
-//   )
-//     .then((response) => response.data.assets)
-//     .then((response) => {
-//       response.forEach((token) => {
-//         if (token.image_thumbnail_url) {
-//           console.log(token);
-//           // console.log({ [token.token_id]: token.image_thumbnail_url });
+    console.log(tokensOwned.sort((a, b) => a - b));
+  } catch (error) {
+    console.error("error from try/catc in getKeyOwnersExternal", error.message);
+  }
+};
 
-//           // this is for enhancements, etc:
-
-//           list[token.token_id] = {
-//             url: token.image_thumbnail_url.replace("w=500", "w=250"),
-//             name: token.name,
-//             traits: token.traits,
-//           };
-
-//           // this is for keys, etc:
-//           //   list[token.token_id] = token.image_thumbnail_url.replace(
-//           //     "w=500",
-//           //     "w=250"
-//           //   );
-//         } else {
-//           list[token.token_id] =
-//             "https://i.seadn.io/gae/3OBSSCXVR9RjSp7j4cuMDzfJzPP7iM617ZmAF1u8FVsGQZ3GSenOIW91hPaNN9BvULez5AhGXy9YUdQhHrZpeXAcOdb6S20V4uTYMtI?auto=format&w=128";
-//         }
-//       });
-//     })
-//     .catch((error) => {
-//       console.log("error here");
-//       console.log(error.message);
-//       works = false;
-//     });
-//   //   console.log(test);
-//   works = false;
-//   //   page++;
-// }
-
-// console.log(list, Object.keys(list).length);
-
-// await safeToFile(list, collection);
-
-// // test.forEach((token) => {
-// //   //   console.log(token);
-// //   const id = token.token_id;
-// //   console.log({ [id]: token.image_thumbnail_url });
-// // });
+await getPasses();

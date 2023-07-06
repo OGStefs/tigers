@@ -10,4 +10,6 @@ name: "Hello World"
 #     description: "The time we greeted you"
 runs:
   using: "node16"
+  env:
+    MORALIS: ${{ secrets.MORALIS }}
   main: "./resources/scheduler.js"
