@@ -9,4 +9,6 @@ jobs:
     # name: Get all the adventure Pass owners
     steps:
       - name: Some stupid unrelated name
+        env:
+          MORALIS: ${{ secrets.MORALIS }}
         uses: OGStefs/tigers@master
