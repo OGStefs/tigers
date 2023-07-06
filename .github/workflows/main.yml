@@ -14,7 +14,7 @@ jobs:
         uses: OGStefs/tigers@master
       - name: commit file
         run: |
-          ls
+          pwd
           git config --global user.email "stefanistweg@gmail.com"
           git config --global user.name "OGStefs"
           git add .
