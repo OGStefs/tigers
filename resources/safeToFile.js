@@ -4,7 +4,7 @@ export const safeToFile = async (json, collection = "wallets") => {
   var jsonContent = JSON.stringify(json);
   fs.writeFile(
     // `./src/storage/${collection}.json`,
-    `./json/${collection}.json`,
+    `${collection}.json`,
 
     jsonContent,
     "utf8",
