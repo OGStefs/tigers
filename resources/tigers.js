@@ -1,11 +1,13 @@
-// const tigersClaimAddress = ""; // MAIN NET
-const tigersClaimAddress = "0x0f1d3f03ACBdeff91695d33C9B59A6F6122fDc6e"; // TEST NET GOERLI
-//   const tigerAddress = "0x61028F622CB6618cAC3DeB9ef0f0D5B9c6369C72"; // MAIN NET
-const tigerAddress = "0x8580156166e7ae7c4a050821a8F2a03bcf9d2Ee9"; // TEST NET GOERLI
-// const cubsClaimAddress = ""; // MAIN NET
-const cubsClaimAddress = "0x1dE8209753409eb764Fb128721A33211c01cB1dA"; // TEST NET GOERLI
-//   const cubAddress = "0x61028F622CB6618cAC3DeB9ef0f0D5B9c6369C72"; // MAIN NET
-const cubAddress = "0x891D1e106c2357d0B84726C18411cCf87B5EB98B"; // TEST NET GOERLI
+const tigersClaimAddress = "0x69E4bf938FB99D765dAEc594Ed2b16A00D16EaaA"; // MAIN NET
+// const tigersClaimAddress = "0x0f1d3f03ACBdeff91695d33C9B59A6F6122fDc6e"; // TEST NET GOERLI
+const tigerAddress = "0xf4744ec5d846f7f1a0c5d389f590cc1344ed3fcf"; // MAIN NET
+// const tigerAddress = "0x8580156166e7ae7c4a050821a8F2a03bcf9d2Ee9"; // TEST NET GOERLI
+const cubsClaimAddress = "0xb196631b8800a05a10a462FeB4Bd5A5D1224dec5"; // MAIN NET
+// const cubsClaimAddress = "0x1dE8209753409eb764Fb128721A33211c01cB1dA"; // TEST NET GOERLI
+const cubAddress = "0x98d3cd2f29a4f5464266f925fe177018e6c2f9e6"; // MAIN NET
+// const cubAddress = "0x891D1e106c2357d0B84726C18411cCf87B5EB98B"; // TEST NET GOERLI
+
+const pkearly = "0xbb75fe5c1b555a26b03cc56d78fa9d520cab4c5b";
 
 // get buttons
 const connectButton = document.getElementById("connect-button");
@@ -60,7 +62,7 @@ async function switchChain() {
   try {
     await ethereum.request({
       method: "wallet_switchEthereumChain",
-      params: [{ chainId: "0x5" }],
+      params: [{ chainId: "0x1" }],
     });
   } catch (err) {
     console.log(err.message);
@@ -74,7 +76,7 @@ async function connect() {
   connectButton.classList.add("button--loading");
   connectButton.textContent = "loading...";
 
-  if (window.ethereum.chainId !== "0x5") {
+  if (window.ethereum.chainId !== "0x1") {
     // TODO: change this to main net "0x1"
     connectButton?.removeEventListener("click", connect);
     connectButton?.addEventListener("click", switchChain);
@@ -246,7 +248,8 @@ async function getOwnedCubs(walletAddress) {
 async function getForged(walletAddress) {
   claimForgedBtn.classList.add("button--loading");
 
-  const url = "./resources/forged-tigers.json";
+  const url = "https://liquidlegends.herokuapp.com/api/v1/forged-tigers";
+  // const url = "./resources/forged-tigers.json";
   let allforged = [];
   let claimable = [];
   let claimedTokens = [];
@@ -263,8 +266,14 @@ async function getForged(walletAddress) {
       }
     });
 
-  let a = web3.utils.toChecksumAddress(walletAddress);
-  if (x) allforged = x[a]?.forged;
+  let a = web3.utils.toChecksumAddress(walletAddress); // TODO: set walletAddress
+  // console.log(x.snapshot.entries);
+  const tigerSnap = x?.snapshot.entries.find(
+    (item) => web3.utils.toChecksumAddress(item.wallet) === a
+  );
+  // console.log(tigerSnap);
+  // if (x) allforged = x[a]?.forged;
+  if (tigerSnap) allforged = tigerSnap?.forged;
   for (let i = 0; i < allforged?.length; i++) {
     const isClaimed = await newTigerContract.methods
       .isClaimed(allforged[i])
@@ -310,7 +319,9 @@ async function getForged(walletAddress) {
 async function getForgedCubs(walletAddress) {
   claimForgedBtnCubs.classList.add("button--loading");
 
-  const url = "./resources/forged-cubs.json";
+  const url =
+    "https://liquidlegends.herokuapp.com/api/v1/forged-baby-cub-tigers";
+  // const url = "./resources/forged-cubs.json";
   let allforged = [];
   let claimable = [];
   let claimedTokens = [];
@@ -327,8 +338,15 @@ async function getForgedCubs(walletAddress) {
       }
     });
 
-  let a = web3.utils.toChecksumAddress(walletAddress);
-  if (x) allforged = x[a]?.forged;
+  let a = web3.utils.toChecksumAddress(walletAddress); // TODO: set walletAddress
+  // console.log(x.snapshot.entries);
+  const cubSnap = x?.snapshot.entries.find(
+    (item) => web3.utils.toChecksumAddress(item.wallet) === a
+  );
+  // console.log(cubSnap);
+  // if (x) allforged = x[a]?.forged;
+  if (cubSnap) allforged = cubSnap?.forged;
+  // if (x) allforged = x[a]?.forged;
   for (let i = 0; i < allforged?.length; i++) {
     const isClaimed = await newCubContract.methods
       .isClaimed(allforged[i])

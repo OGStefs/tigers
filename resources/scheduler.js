@@ -1,8 +1,11 @@
 import axios from "axios";
 import dotenv from "dotenv";
+import Web3 from "web3";
 import { safeToFile } from "./safeToFile.js";
 
 dotenv.config();
+
+const web3 = new Web3();
 
 const list = {};
 let cursor = "";
@@ -37,10 +40,11 @@ while (works) {
   //   console.log(test.data.cursor);
 
   test?.data?.result?.forEach((res) => {
-    if (list.hasOwnProperty(res.owner_of)) {
-      list[res.owner_of].push(parseInt(res.token_id));
+    const owner = web3.utils.toChecksumAddress(res.owner_of);
+    if (list.hasOwnProperty(owner)) {
+      list[owner].push(parseInt(res.token_id));
     } else {
-      list[res.owner_of] = [parseInt(res.token_id)];
+      list[owner] = [parseInt(res.token_id)];
     }
   });
   if (test?.data?.cursor) {
